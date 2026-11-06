@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Campus File Share{% endblock %}
+{% block crumb %}Dashboard{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">{{ current_user['role']|upper }} WORKSPACE</span><h1>Welcome, {{ current_user['name'].split()[0] }} 👋</h1><p class="muted">{% if current_user['role']=='admin' %}Manage users, files and campus activity from one place.{% elif current_user['role']=='faculty' %}Share notes, assignments and resources with your students.{% else %}Access, upload and share your academic files.{% endif %}</p></div><a href="{{ url_for('upload') }}" class="btn btn-primary">＋ Upload File</a></div>
+{% if current_user['role']=='admin' %}
+<div class="stats-grid four">
+    <div class="stat-card"><div class="stat-icon blue">♙</div><div><small>Total Users</small><strong>{{ data.total_users }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon purple">🎓</div><div><small>Students</small><strong>{{ data.students }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon orange">♧</div><div><small>Faculty</small><strong>{{ data.faculty }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon teal">▣</div><div><small>Total Files</small><strong>{{ data.total_files }}</strong></div></div>
+</div>
+{% elif current_user['role']=='faculty' %}
+<div class="stats-grid four">
+    <div class="stat-card"><div class="stat-icon blue">▣</div><div><small>Your Materials</small><strong>{{ data.total_files }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon purple">♙</div><div><small>Students</small><strong>{{ data.students }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon teal">▤</div><div><small>Subjects</small><strong>{{ data.subjects }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon orange">⇧</div><div><small>Your Storage</small><strong>{{ human_size(data.used) }}</strong></div></div>
+</div>
+{% else %}
+<div class="stats-grid four">
+    <div class="stat-card"><div class="stat-icon blue">▣</div><div><small>Available Files</small><strong>{{ data.total_files }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon purple">♧</div><div><small>Shared With You</small><strong>{{ data.shared }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon teal">⇩</div><div><small>Total Downloads</small><strong>{{ data.downloads }}</strong></div></div>
+    <div class="stat-card"><div class="stat-icon orange">◴</div><div><small>Your Uploads</small><strong>{{ human_size(data.used) }}</strong></div></div>
+</div>
+{% endif %}
+<div class="content-grid">
+    <section class="panel recent-panel"><div class="panel-heading"><div><h2>{% if current_user['role']=='admin' %}Recent Files{% else %}Recent Materials{% endif %}</h2><p class="muted">Latest activity in your workspace</p></div><a href="{{ url_for('files_page') }}" class="text-link">View all →</a></div>
+        {% set recent = data.recent_files %}
+        {% if recent %}
+        <div class="file-list">
+            {% for f in recent %}
+            <div class="file-row"><div class="file-type {{ f.original_name.rsplit('.',1)[-1]|lower if '.' in f.original_name else 'file' }}">{{ f.original_name.rsplit('.',1)[-1]|upper if '.' in f.original_name else 'FILE' }}</div><div class="file-info"><strong>{{ f.original_name }}</strong><small>{% if current_user['role']=='admin' %}Uploaded by {{ f.uploader }}{% else %}{{ f.subject or f.description or 'Campus material' }}{% endif %} · {{ human_size(f.size) }}</small></div><a class="icon-action" href="{{ url_for('download', file_id=f.id) }}" title="Download">↓</a></div>
+            {% endfor %}
+        </div>
+        {% else %}<div class="empty-state"><div>📂</div><strong>No files yet</strong><p>Upload your first academic resource to get started.</p><a class="btn btn-primary" href="{{ url_for('upload') }}">Upload a file</a></div>{% endif %}
+    </section>
+    <section class="panel quick-panel"><div class="panel-heading"><div><h2>Quick Actions</h2><p class="muted">Get things done faster</p></div></div>
+        <a class="quick-action primary-action" href="{{ url_for('upload') }}"><span>⇧</span><div><strong>Upload File</strong><small>Add notes or assignments</small></div><b>→</b></a>
+        <a class="quick-action" href="{{ url_for('files_page') }}"><span>▣</span><div><strong>Browse Materials</strong><small>Find campus resources</small></div><b>→</b></a>
+        {% if current_user['role']=='admin' %}<a class="quick-action" href="{{ url_for('users_page') }}"><span>♙</span><div><strong>Manage Users</strong><small>Review campus accounts</small></div><b>→</b></a>{% elif current_user['role']=='faculty' %}<a class="quick-action" href="{{ url_for('subjects_page') }}"><span>▤</span><div><strong>Manage Subjects</strong><small>Organise course materials</small></div><b>→</b></a>{% else %}<a class="quick-action" href="{{ url_for('profile') }}"><span>⚙</span><div><strong>My Profile</strong><small>Update your details</small></div><b>→</b></a>{% endif %}
+    </section>
+</div>
+{% if current_user['role']=='admin' %}
+<div class="content-grid lower-grid"><section class="panel"><div class="panel-heading"><div><h2>Recent Users</h2><p class="muted">New campus members</p></div><a href="{{ url_for('users_page') }}" class="text-link">View all →</a></div><div class="user-list">{% for u in data.recent_users %}<div class="user-row"><div class="avatar">{{ u.name[0]|upper }}</div><div><strong>{{ u.name }}</strong><small>{{ u.email }}</small></div><span class="role-pill {{ u.role }}">{{ u.role|title }}</span></div>{% endfor %}</div></section><section class="panel storage-panel"><h2>System Overview</h2><p class="muted">Uploaded file storage</p><div class="storage-number">{{ human_size(data.used) }}</div><div class="progress"><span style="width:{{ [((data.used / (5*1024*1024*1024))*100),100]|min }}%"></span></div><small class="muted">Local project storage · 5 GB visual reference capacity</small></section></div>
+{% endif %}
+{% endblock %}

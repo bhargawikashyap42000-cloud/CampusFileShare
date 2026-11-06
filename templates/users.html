@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Users | Campus File Share{% endblock %}
+{% block crumb %}Users{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">ADMINISTRATION</span><h1>Campus Users</h1><p class="muted">View accounts and manage access roles.</p></div></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Role</th><th>Change Role</th></tr></thead><tbody>{% for u in users %}<tr><td><strong>{{ u.name }}</strong></td><td>{{ u.email }}</td><td>{{ u.department }}</td><td><span class="role-pill {{ u.role }}">{{ u.role|title }}</span></td><td><form class="role-form" method="POST" action="{{ url_for('change_role', user_id=u.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><select name="role"><option value="student" {{ 'selected' if u.role=='student' else '' }}>Student</option><option value="faculty" {{ 'selected' if u.role=='faculty' else '' }}>Faculty</option><option value="admin" {{ 'selected' if u.role=='admin' else '' }}>Admin</option></select><button class="btn btn-small btn-outline">Update</button></form></td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

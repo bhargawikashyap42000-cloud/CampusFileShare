@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Subjects | Campus File Share{% endblock %}
+{% block crumb %}Subjects{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">ACADEMICS</span><h1>Manage Subjects</h1><p class="muted">Organise learning resources by course and subject.</p></div></div>
+<div class="content-grid"><section class="panel"><h2>Add a Subject</h2><form method="POST" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><label>Subject Name<input name="name" placeholder="e.g. Cloud Computing" required></label><label>Subject Code<input name="code" placeholder="e.g. CS501" required></label><button class="btn btn-primary">Create Subject</button></form></section><section class="panel"><h2>Subject Catalogue</h2><div class="subject-list">{% for s in subjects %}<div class="subject-row"><span class="subject-icon">▤</span><div><strong>{{ s.name }}</strong><small>{{ s.code }} · {{ s.faculty or 'Unassigned' }}</small></div></div>{% endfor %}</div></section></div>
+{% endblock %}

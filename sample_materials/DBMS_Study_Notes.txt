@@ -1,0 +1,21 @@
+CAMPUS FILE SHARE | DBMS STUDY NOTES
+
+1. Database basics
+A database is an organised collection of related data. A DBMS is software used to define, create, maintain and control access to databases.
+
+2. Relational model
+Data is stored in tables. A row is a record and a column is an attribute. A primary key uniquely identifies each row. A foreign key references a key in another table.
+
+3. Normalisation
+1NF: every attribute contains atomic values.
+2NF: 1NF plus no partial dependency on a candidate key.
+3NF: 2NF plus no transitive dependency of non-key attributes on a candidate key.
+BCNF: every determinant is a candidate key.
+
+4. SQL examples
+SELECT name, email FROM students;
+SELECT department, COUNT(*) FROM students GROUP BY department;
+SELECT s.name, c.course_name FROM students s JOIN courses c ON c.id=s.course_id;
+
+5. Transactions
+ACID means Atomicity, Consistency, Isolation and Durability.

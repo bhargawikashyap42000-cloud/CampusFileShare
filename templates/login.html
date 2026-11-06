@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Login | Campus File Share{% endblock %}
+{% block auth_content %}
+<div class="auth-page">
+    <div class="auth-visual">
+        <div class="auth-brand"><span class="brand-mark">↑</span> Campus File Share</div>
+        <div class="auth-copy"><span class="eyebrow">YOUR CAMPUS. CONNECTED.</span><h1>One Campus.<br>One Platform.</h1><p>A secure platform for students and faculty to upload, share and access academic files.</p>
+            <div class="auth-features"><div><span>▣</span>Share Study Materials</div><div><span>⇧</span>Upload & Download Files</div><div><span>♧</span>Role Based Access</div><div><span>◇</span>Secure & Campus Only</div></div>
+        </div>
+        <div class="auth-wave"></div>
+    </div>
+    <div class="auth-panel"><div class="auth-card">
+        <div class="auth-icon">🎓</div><h2>Welcome Back!</h2><p class="muted center">Login to access your campus account</p>
+        <form method="POST" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Email Address<input type="email" name="email" placeholder="Enter your email" required autocomplete="username"></label>
+            <label>Password<div class="password-field"><input type="password" name="password" id="password" placeholder="Enter your password" required autocomplete="current-password"><button type="button" class="show-password" data-toggle="password">Show</button></div></label>
+            <div class="form-between"><label class="check-label"><input type="checkbox" name="remember"> Remember Me</label><span class="muted tiny">Secure campus access</span></div>
+            <button class="btn btn-primary full" type="submit">Login to Account <span>→</span></button>
+        </form>
+        <div class="or-divider"><span>OR</span></div>
+        <a class="btn btn-outline full" href="{{ url_for('register') }}">Create New Account</a>
+        <p class="auth-foot">© 2026 Campus File Share</p>
+        <div class="demo-box"><strong>Demo accounts</strong><br>Student: student@campus.edu / Student@123<br>Faculty: faculty@campus.edu / Faculty@123<br>Admin: admin@campus.edu / Admin@123</div>
+    </div></div>
+</div>
+{% endblock %}

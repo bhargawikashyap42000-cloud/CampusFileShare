@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}My Files | Campus File Share{% endblock %}
+{% block crumb %}My Files{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">LIBRARY</span><h1>Academic Files</h1><p class="muted">Browse files available to your role, your own uploads and materials shared with you.</p></div><a class="btn btn-primary" href="{{ url_for('upload') }}">＋ Upload File</a></div>
+<form class="search-bar" method="GET"><span>⌕</span><input name="q" value="{{ q }}" placeholder="Search file name, subject or description"><button class="btn btn-primary">Search</button></form>
+<section class="panel"><div class="panel-heading"><div><h2>All Materials</h2><p class="muted">{{ files|length }} file(s) available to you</p></div></div>
+{% if files %}<div class="table-wrap"><table><thead><tr><th>File</th><th>Uploaded By</th><th>Subject</th><th>Access</th><th>Size</th><th>Action</th></tr></thead><tbody>
+{% for f in files %}<tr><td><div class="table-file"><span class="file-type mini">{{ f.original_name.rsplit('.',1)[-1]|upper if '.' in f.original_name else 'FILE' }}</span><strong>{{ f.original_name }}</strong></div><small class="table-sub">{{ f.description }}</small></td><td>{{ f.uploader }}</td><td>{{ f.subject or '—' }}</td><td><span class="role-pill {{ 'student' if f.visibility=='campus' else 'faculty' }}">{{ 'Public' if f.visibility=='public' else ('Campus' if f.visibility=='campus' else 'Private') }}</span></td><td>{{ human_size(f.size) }}</td><td><a class="btn btn-small btn-outline" href="{{ url_for('download', file_id=f.id) }}">↓ Download</a>{% if f.uploader_id == session.get('user_id') or current_user['role'] == 'admin' %}<details style="display:inline-block"><summary class="btn btn-small btn-outline">Share</summary><form method="POST" action="{{ url_for('share_file', file_id=f.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="email" name="email" placeholder="user@campus.edu" required><button class="btn btn-small btn-primary" type="submit">Send</button></form></details>{% endif %}{% if f.uploader_id != session.get('user_id') %}<form method="POST" action="{{ url_for('report_file', file_id=f.id) }}" style="display:inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="reason" value="Please review this shared file."><button class="btn btn-small btn-outline" type="submit">Report</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><div>📁</div><strong>No matching files</strong><p>Try another search or upload a file.</p></div>{% endif %}
+</section>
+
+{% endblock %}

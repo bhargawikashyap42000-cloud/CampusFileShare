@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Upload File | Campus File Share{% endblock %}
+{% block crumb %}Upload File{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">CONTRIBUTE</span><h1>Upload a Resource</h1><p class="muted">Share notes, assignments and learning material with your campus.</p></div></div>
+<div class="form-panel panel"><form method="POST" enctype="multipart/form-data" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Choose File<div class="drop-zone"><span class="upload-cloud">⇧</span><strong id="fileName">Drop a file here or browse</strong><small>PDF, Word, PowerPoint, Excel, images, TXT or ZIP · Maximum 25 MB</small><input type="file" name="file" id="fileInput" required></div></label>
+<label>File Description<textarea name="description" rows="3" placeholder="Briefly describe this resource..."></textarea></label>
+<label>Subject<select name="subject_id"><option value="">General / Not specified</option>{% for s in subjects %}<option value="{{ s.id }}">{{ s.code }} — {{ s.name }}</option>{% endfor %}</select></label>
+<label>Access Level<select name="visibility"><option value="campus">Campus — role-based college access</option><option value="public">Public — visible to all signed-in students, faculty and admins</option><option value="private">Private — only me, admin and explicitly shared users</option></select></label>
+<div class="muted"><p><strong>Campus access:</strong> student uploads are visible to faculty/admin; faculty uploads are visible to students/admin; admin uploads are visible to students/faculty.</p><p><strong>Public access:</strong> every signed-in user can view the file, including other students when a student chooses Public.</p><p><strong>Private access:</strong> only you and users you explicitly share with can view or download it. Admins cannot automatically open private files; they can review one only while a report about it is pending.</p></div>
+<button class="btn btn-primary">Upload Resource →</button>
+</form></div>
+{% endblock %}

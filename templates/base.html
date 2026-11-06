@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Campus File Share{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="app-body">
+{% if current_user %}
+<div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">↑</span><span>Campus<br>File Share</span></a>
+        <div class="side-label">WORKSPACE</div>
+        <nav class="side-nav">
+            <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' else '' }}"><span>⌂</span>Dashboard</a>
+            <a href="{{ url_for('files_page') }}" class="{{ 'active' if request.endpoint == 'files_page' else '' }}"><span>▣</span>My Files</a>
+            {% if current_user['role'] == 'student' %}
+            <a href="{{ url_for('shared_with_me') }}" class="{{ 'active' if request.endpoint == 'shared_with_me' else '' }}"><span>♧</span>Shared With Me</a>
+            {% endif %}
+            <a href="{{ url_for('upload') }}" class="{{ 'active' if request.endpoint == 'upload' else '' }}"><span>⇧</span>Upload File</a>
+            {% if current_user['role'] in ['faculty','admin'] %}
+            <a href="{{ url_for('subjects_page') }}" class="{{ 'active' if request.endpoint == 'subjects_page' else '' }}"><span>▤</span>Manage Subjects</a>
+            {% endif %}
+            {% if current_user['role'] == 'admin' %}
+            <a href="{{ url_for('users_page') }}" class="{{ 'active' if request.endpoint == 'users_page' else '' }}"><span>♙</span>Users</a>
+            <a href="{{ url_for('reports') }}" class="{{ 'active' if request.endpoint == 'reports' else '' }}"><span>▥</span>Reports</a>
+            <a href="{{ url_for('activity_logs') }}" class="{{ 'active' if request.endpoint == 'activity_logs' else '' }}"><span>◷</span>Activity Logs</a>
+            {% endif %}
+        </nav>
+        <div class="side-bottom">
+            <a href="{{ url_for('profile') }}"><span>⚙</span>Profile & Settings</a>
+            <form method="POST" action="{{ url_for('logout') }}" class="logout-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit" class="sidebar-link"><span>⇥</span>Logout</button></form>
+            <div class="sidebar-user"><div class="avatar">{{ current_user['name'][0]|upper }}</div><div><strong>{{ current_user['name'] }}</strong><small>{{ current_user['role']|title }}</small></div></div>
+        </div>
+    </aside>
+    <main class="main-area">
+        <header class="topbar">
+            <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+            <div class="breadcrumb">Campus File Share <span>/</span> {% block crumb %}Workspace{% endblock %}</div>
+            <div class="top-actions"><span class="status-dot"></span><span class="top-user">{{ current_user['name'] }}</span><div class="avatar small">{{ current_user['name'][0]|upper }}</div></div>
+        </header>
+        <section class="page-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</div>
+{% else %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="auth-flashes">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block auth_content %}{% endblock %}
+{% endif %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

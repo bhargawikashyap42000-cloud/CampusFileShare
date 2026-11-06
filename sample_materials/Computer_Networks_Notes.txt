@@ -1,0 +1,17 @@
+CAMPUS FILE SHARE | COMPUTER NETWORKS NOTES
+
+1. Network
+A computer network connects devices so they can exchange data and share resources.
+
+2. Models
+The OSI model has Physical, Data Link, Network, Transport, Session, Presentation and Application layers.
+The TCP/IP model commonly groups networking into Link, Internet, Transport and Application layers.
+
+3. Protocols
+IP provides addressing and routing. TCP provides reliable, ordered delivery. UDP provides lightweight datagram delivery. DNS maps domain names to IP addresses. HTTP/HTTPS supports web communication.
+
+4. Addressing
+IPv4 addresses are 32 bits. A subnet mask separates network and host portions. A default gateway forwards traffic to other networks.
+
+5. Security
+Use strong authentication, updates, firewalls and encrypted protocols such as HTTPS.

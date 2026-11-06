@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Create Account | Campus File Share{% endblock %}
+{% block auth_content %}
+<div class="auth-page">
+    <div class="auth-visual">
+        <div class="auth-brand"><span class="brand-mark">↑</span> Campus File Share</div>
+        <div class="auth-copy"><span class="eyebrow">JOIN YOUR CAMPUS</span><h1>Learn.<br>Share.<br>Grow Together.</h1><p>Create your campus account to access learning materials and collaborate with your academic community.</p></div><div class="auth-wave"></div>
+    </div>
+    <div class="auth-panel"><div class="auth-card register-card">
+        <div class="auth-icon">🎓</div><h2>Create Account</h2><p class="muted center">Register for your campus workspace</p>
+        <form method="POST" class="form-stack"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label>Full Name<input name="name" placeholder="Enter your full name" required></label>
+            <label>Email Address<input type="email" name="email" placeholder="name@college.edu" required></label>
+            <label>Department<input name="department" placeholder="e.g. Computer Science" required></label>
+            <label>Account Type<select name="role" required><option value="student">Student</option><option value="faculty">Faculty</option></select></label>
+            <label>Password<input type="password" name="password" minlength="8" placeholder="At least 8 characters" required></label>
+            <label>Confirm Password<input type="password" name="confirm_password" minlength="8" placeholder="Re-enter password" required></label>
+            <button class="btn btn-primary full" type="submit">Create Account →</button>
+        </form>
+        <p class="auth-foot">Already have an account? <a href="{{ url_for('login') }}">Sign in</a></p>
+    </div></div>
+</div>
+{% endblock %}

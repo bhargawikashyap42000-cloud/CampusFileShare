@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Shared With Me | Campus File Share{% endblock %}
+{% block crumb %}Shared With Me{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">YOUR SHARED LIBRARY</span><h1>Shared With Me</h1><p class="muted">Files that other campus members have explicitly shared with your account.</p></div></div>
+<form class="search-bar" method="GET"><span>⌕</span><input name="q" value="{{ q }}" placeholder="Search file name, subject or description"><button class="btn btn-primary">Search</button></form>
+<section class="panel"><div class="panel-heading"><div><h2>Files Shared With You</h2><p class="muted">{{ files|length }} shared file(s)</p></div></div>
+{% if files %}<div class="table-wrap"><table><thead><tr><th>File</th><th>Shared By</th><th>Subject</th><th>Access</th><th>Size</th><th>Action</th></tr></thead><tbody>
+{% for f in files %}<tr><td><div class="table-file"><span class="file-type mini">{{ f.original_name.rsplit('.',1)[-1]|upper if '.' in f.original_name else 'FILE' }}</span><strong>{{ f.original_name }}</strong></div><small class="table-sub">{{ f.description }}</small></td><td>{{ f.uploader }}</td><td>{{ f.subject or '—' }}</td><td><span class="role-pill {{ 'student' if f.visibility=='campus' else 'faculty' }}">{{ 'Public' if f.visibility=='public' else ('Campus' if f.visibility=='campus' else 'Private') }}</span></td><td>{{ human_size(f.size) }}</td><td><a class="btn btn-small btn-outline" href="{{ url_for('download', file_id=f.id) }}">↓ Download</a></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><div>📨</div><strong>No files shared with you yet</strong><p>When another campus member shares a file with your account, it will appear here.</p></div>{% endif %}
+</section>
+{% endblock %}

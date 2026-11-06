@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Reports | Campus File Share{% endblock %}
+{% block crumb %}Reports{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">ADMINISTRATION</span><h1>Campus Reports</h1><p class="muted">A snapshot of platform activity.</p></div></div>
+<div class="stats-grid four"><div class="stat-card"><div class="stat-icon blue">♙</div><div><small>Registered Users</small><strong>{{ stats.users }}</strong></div></div><div class="stat-card"><div class="stat-icon purple">▣</div><div><small>Uploaded Files</small><strong>{{ stats.files }}</strong></div></div><div class="stat-card"><div class="stat-icon teal">⇩</div><div><small>Downloads</small><strong>{{ stats.downloads }}</strong></div></div><div class="stat-card"><div class="stat-icon orange">◴</div><div><small>Storage Used</small><strong>{{ human_size(stats.storage) }}</strong></div></div></div>
+<section class="panel"><h2>Platform summary</h2><p class="muted">These figures are calculated from the local SQLite database and uploaded file records. Private file contents are not exposed to admins unless a user reports the file for moderation.</p></section>
+<section class="panel"><div class="panel-heading"><div><h2>Reported files for review</h2><p class="muted">A private file becomes available to admins only while its report is pending.</p></div></div>
+{% if reports %}<div class="table-wrap"><table><thead><tr><th>File</th><th>Reported By</th><th>Reason</th><th>Access</th><th>Action</th></tr></thead><tbody>
+{% for r in reports %}<tr><td><strong>{{ r.original_name }}</strong><br><small class="table-sub">Report #{{ r.id }}</small></td><td>{{ r.reporter }}</td><td>{{ r.reason }}</td><td>{{ r.visibility|title }}</td><td><a class="btn btn-small btn-outline" href="{{ url_for('download', file_id=r.file_id) }}">Review / Download</a><form method="POST" action="{{ url_for('resolve_report', report_id=r.id) }}" style="display:inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="status" value="reviewed"><button class="btn btn-small btn-primary">Mark reviewed</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<div class="empty-state"><div>✓</div><strong>No pending reports</strong><p>Reported files will appear here for moderation.</p></div>{% endif %}</section>
+{% endblock %}

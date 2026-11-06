@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Activity Logs | Campus File Share{% endblock %}
+{% block crumb %}Activity Logs{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><span class="eyebrow">ADMINISTRATION</span><h1>Activity Logs</h1><p class="muted">Recent account and file actions. Passwords, tokens and file contents are never recorded here.</p></div></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Time</th><th>User</th><th>Role</th><th>Activity</th><th>Target</th><th>Details</th><th>IP</th></tr></thead><tbody>
+{% for item in logs %}<tr><td>{{ item.created_at }}</td><td>{{ item.actor_name }}</td><td>{{ item.actor_role|title }}</td><td>{{ item.action|replace('_',' ')|title }}</td><td>{{ item.target_type }}{% if item.target_id %} #{{ item.target_id }}{% endif %}</td><td>{{ item.details }}</td><td>{{ item.ip_address or '—' }}</td></tr>{% else %}<tr><td colspan="7">No activity recorded yet.</td></tr>{% endfor %}
+</tbody></table></div><p class="muted tiny">Showing the latest 300 events.</p></section>
+{% endblock %}

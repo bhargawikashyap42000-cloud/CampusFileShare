@@ -1,0 +1,18 @@
+CAMPUS FILE SHARE | PYTHON PROGRAMMING NOTES
+
+1. Variables and types
+Python variables refer to objects. Common built-in types include int, float, str, bool, list, tuple, set and dict.
+
+2. Conditions and loops
+Use if/elif/else for branching. Use for to iterate over a sequence and while to repeat while a condition is true.
+
+3. Functions
+Define reusable code with def:
+def greet(name):
+    return f"Hello, {name}"
+
+4. Collections
+Lists are ordered and mutable. Tuples are ordered and immutable. Sets store unique values. Dictionaries map keys to values.
+
+5. Exceptions and files
+Use try/except to handle expected errors. Use with open("notes.txt", encoding="utf-8") as file: to safely read a file.
